@@ -24,17 +24,16 @@
     <!-- Simple emoji favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍞</text></svg>">
     
-    <!-- Try multiple Tailwind CSS CDN sources for reliability -->
-    <link href="https://unpkg.com/tailwindcss@^3/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <!-- Use a single, reliable Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" integrity="sha512-9khQRAUBYEJDCDVP2yw3LRUQvjJ0Pjx0EShmaQjcHa6AXiOv6qHQu9lCAIR8O+/D8FtaCoJ2c0Tf9Xo7hYH01Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js" integrity="sha512-m3/igqOlwt5MZpTqxUj1eEhFyjgZnVdoq4rnHNZCGNqRNhkf8fDEQYBqF14V9yOlw+7B4d2a2Bv6XBFZEK5qow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js" integrity="sha512-OvwVNqwKSZRVX9YjOm8bqJGXRx1oxzJ3Xe1AX8MnXZRFpgfF9H1o8RdvYFZdGAMOT3/HGE3WgfC2uK+rYE2gXQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" integrity="sha512-SkmBfuA2hqjzEVpmnMt/LINrjop3GKWqsuLSSB3e7iBmYK7JuWw4ldmmxwD9mdm2IRTTi0OxSAfEGvgEi0i2Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         /* Toast Styles */
         .toast-container {
@@ -128,10 +127,13 @@
             padding: 20px;
             background-color: #f9fafb;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         h1 { font-size: 3rem; font-weight: bold; margin-bottom: 1rem; color: #1f2937; }
         h2 { font-size: 2rem; font-weight: bold; margin: 2rem 0 1rem; color: #374151; }
         h3 { font-size: 1.5rem; font-weight: 600; margin: 1.5rem 0 1rem; color: #4b5563; }
+        p { margin-bottom: 1rem; color: #6b7280; }
+        ul { list-style: none; padding: 0; }
+        li { margin: 0.5rem 0; }
         button { 
             padding: 12px 24px; 
             margin: 4px; 
@@ -139,35 +141,73 @@
             border-radius: 8px; 
             cursor: pointer; 
             font-weight: 600;
+            font-size: 14px;
             transition: all 0.2s;
+            display: inline-block;
         }
-        .bg-green-500 { background: #10b981; color: white; }
-        .bg-red-500 { background: #ef4444; color: white; }
-        .bg-yellow-500 { background: #f59e0b; color: white; }
-        .bg-blue-500 { background: #3b82f6; color: white; }
-        .bg-gray-500 { background: #6b7280; color: white; }
-        .bg-indigo-500 { background: #6366f1; color: white; }
-        .bg-teal-500 { background: #14b8a6; color: white; }
-        .bg-purple-500 { background: #8b5cf6; color: white; }
-        .bg-red-600 { background: #dc2626; color: white; }
-        .grid { display: grid; gap: 1rem; }
+        button:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        
+        /* Button Colors */
+        .bg-green-500, button[id*="success"] { background: #10b981 !important; color: white !important; }
+        .bg-red-500, button[id*="error"] { background: #ef4444 !important; color: white !important; }
+        .bg-yellow-500, button[id*="warning"] { background: #f59e0b !important; color: white !important; }
+        .bg-blue-500, button[id*="info"], .placement-btn { background: #3b82f6 !important; color: white !important; }
+        .bg-gray-500, button[id*="default"] { background: #6b7280 !important; color: white !important; }
+        .bg-indigo-500, button[id*="persistent"] { background: #6366f1 !important; color: white !important; }
+        .bg-teal-500, button[id*="quick"] { background: #14b8a6 !important; color: white !important; }
+        .bg-purple-500, button[id*="multiple"] { background: #8b5cf6 !important; color: white !important; }
+        .bg-red-600, button[id*="clear"] { background: #dc2626 !important; color: white !important; }
+        
+        /* Layout */
+        .grid { display: grid; gap: 1rem; margin: 1rem 0; }
         .grid-cols-1 { grid-template-columns: 1fr; }
+        .flex { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .justify-center { justify-content: center; }
+        
+        /* Responsive */
         @media (min-width: 640px) {
             .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
         }
         @media (min-width: 1024px) {
             .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
         }
-        .flex { display: flex; }
-        .justify-center { justify-content: center; }
-        .space-x-4 > * + * { margin-left: 1rem; }
-        .mb-4 { margin-bottom: 1rem; }
-        .mb-8 { margin-bottom: 2rem; }
-        .mb-16 { margin-bottom: 4rem; }
-        .p-6 { padding: 1.5rem; }
-        .rounded-lg { border-radius: 0.5rem; }
-        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-        .bg-white { background-color: white; }
+        
+        /* Spacing & Styling */
+        .mb-4 { margin-bottom: 1rem !important; }
+        .mb-8 { margin-bottom: 2rem !important; }
+        .mb-16 { margin-bottom: 4rem !important; }
+        .p-6 { padding: 1.5rem !important; }
+        .rounded-lg { border-radius: 0.5rem !important; }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important; }
+        .bg-white { background-color: white !important; }
+        .text-3xl { font-size: 1.875rem !important; font-weight: bold !important; }
+        .text-xl { font-size: 1.25rem !important; font-weight: 600 !important; }
+        .font-bold { font-weight: bold !important; }
+        .text-white { color: white !important; }
+        
+        /* Demo sections */
+        .demo-section {
+            background: white;
+            padding: 24px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        /* Code blocks */
+        pre { 
+            background: #1f2937; 
+            color: white; 
+            padding: 1rem; 
+            border-radius: 8px; 
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        code { 
+            font-family: 'Monaco', 'Courier New', monospace; 
+            font-size: 14px;
+        }
 
         .placement-grid {
             display: grid;
