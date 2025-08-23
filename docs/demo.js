@@ -117,7 +117,7 @@ function ToastContainer({ toasts, placement }) {
         style: {
             position: 'fixed',
             zIndex: 9999,
-            pointerEvents: 'none',
+            pointerEvents: 'auto', // Allow clicks on toasts
             padding: '16px',
             display: 'flex',
             flexDirection: 'column',
@@ -226,7 +226,7 @@ function DemoApp() {
                 placementBtns.forEach(b => b.classList.remove('bg-blue-600'));
                 e.target.classList.add('bg-blue-600');
                 
-                toast.info(`📍 Placement changed to ${placement.replace('-', ' ')}`);
+                toastStore.show(`📍 Placement changed to ${placement.replace('-', ' ')}`, { type: 'info' });
             });
         });
 

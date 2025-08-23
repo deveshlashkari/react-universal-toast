@@ -24,7 +24,7 @@
     <!-- Simple emoji favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍞</text></svg>">
     
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -38,7 +38,7 @@
         .toast-container {
             position: fixed;
             z-index: 9999;
-            pointer-events: none;
+            pointer-events: auto;
             padding: 16px;
         }
 
@@ -68,6 +68,7 @@
 
         .toast-success { background: #10B981; }
         .toast-error { background: #EF4444; }
+        .toast-warning { background: #F59E0B; }
         .toast-info { background: #3B82F6; }
         .toast-default { background: #374151; }
 
@@ -232,7 +233,7 @@
                     <button id="persistent-btn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-6 rounded">
                         📌 Persistent Toast
                     </button>
-                    <button id="quick-btn" class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-6 rounded">
+                    <button id="quick-btn" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-6 rounded">
                         ⚡ Quick Toast (1s)
                     </button>
                     <button id="multiple-btn" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded">
