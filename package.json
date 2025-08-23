@@ -11,7 +11,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc && copyfiles src/styles.css dist",
+    "build": "tsc && copyfiles -u 1 src/styles.css dist",
     "prepublishOnly": "npm run build",
     "test": "jest",
     "test:watch": "jest --watch",

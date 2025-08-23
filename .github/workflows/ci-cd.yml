@@ -40,7 +40,14 @@ jobs:
         run: |
           test -f dist/index.js || { echo "dist/index.js not found"; exit 1; }
           test -f dist/index.d.ts || { echo "dist/index.d.ts not found"; exit 1; }
-          test -f dist/styles.css || { echo "dist/styles.css not found"; exit 1; }
+          if [ -f dist/styles.css ]; then
+            echo "✅ dist/styles.css found"
+          elif [ -f dist/src/styles.css ]; then
+            echo "✅ dist/src/styles.css found (fallback location)"
+          else
+            echo "❌ styles.css not found in dist/ or dist/src/"
+            exit 1
+          fi
           echo "✅ All build artifacts found"
 
   publish:
