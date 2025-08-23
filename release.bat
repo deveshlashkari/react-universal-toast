@@ -21,8 +21,8 @@ if !errorlevel! neq 0 (
 
 REM Check current branch
 for /f "tokens=*" %%i in ('git branch --show-current') do set CURRENT_BRANCH=%%i
-if not "%CURRENT_BRANCH%"=="main" if not "%CURRENT_BRANCH%"=="master" (
-    echo ❌ Please switch to main/master branch before releasing.
+if not "%CURRENT_BRANCH%"=="main" (
+    echo ❌ Please switch to main branch before releasing.
     pause
     exit /b 1
 )

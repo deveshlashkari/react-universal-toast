@@ -22,10 +22,10 @@ if [[ -n $(git status --porcelain) ]]; then
     exit 1
 fi
 
-# Check if we're on main/master branch
+# Check if we're on main branch
 CURRENT_BRANCH=$(git branch --show-current)
-if [[ "$CURRENT_BRANCH" != "main" && "$CURRENT_BRANCH" != "master" ]]; then
-    echo -e "${RED}❌ Please switch to main/master branch before releasing.${NC}"
+if [[ "$CURRENT_BRANCH" != "main" ]]; then
+    echo -e "${RED}❌ Please switch to main branch before releasing.${NC}"
     exit 1
 fi
 
