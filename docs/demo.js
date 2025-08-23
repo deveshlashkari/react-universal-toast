@@ -1,11 +1,12 @@
 // React Universal Toast Demo Implementation
 const { useState, useEffect, useRef } = React;
 
-// Mock Toast Store (simplified version of your actual implementation)
+// Enhanced Toast Store with auto-dismiss functionality
 class ToastStore {
     constructor() {
         this.toasts = [];
         this.subscribers = [];
+        this.timers = new Map(); // Track auto-dismiss timers
     }
 
     subscribe(callback) {
@@ -16,30 +17,50 @@ class ToastStore {
     }
 
     show(message, options = {}) {
-        const id = Date.now().toString();
+        const id = Date.now().toString() + Math.random().toString(36).substr(2, 9);
         const toast = {
             id,
             message,
-            type: options.type || 'default'
+            type: options.type || 'default',
+            autoDismiss: options.autoDismiss !== false // Auto-dismiss by default
         };
         
         this.toasts.push(toast);
         this.notifySubscribers();
+
+        // Auto-dismiss after 4 seconds (unless disabled)
+        if (toast.autoDismiss) {
+            const timer = setTimeout(() => {
+                this.remove(id);
+            }, options.duration || 4000);
+            this.timers.set(id, timer);
+        }
+
         return id;
     }
 
     remove(id) {
+        // Clear any existing timer
+        if (this.timers.has(id)) {
+            clearTimeout(this.timers.get(id));
+            this.timers.delete(id);
+        }
+
         this.toasts = this.toasts.filter(toast => toast.id !== id);
         this.notifySubscribers();
     }
 
     clear() {
+        // Clear all timers
+        this.timers.forEach(timer => clearTimeout(timer));
+        this.timers.clear();
+        
         this.toasts = [];
         this.notifySubscribers();
     }
 
     notifySubscribers() {
-        this.subscribers.forEach(callback => callback(this.toasts));
+        this.subscribers.forEach(callback => callback([...this.toasts]));
     }
 }
 
@@ -48,7 +69,72 @@ const toastStore = new ToastStore();
 // Toast Context
 const ToastContext = React.createContext();
 
-// Toast Provider Component
+// Individual Toast Component with animation
+function Toast({ toast, onRemove, placement }) {
+    const [isVisible, setIsVisible] = useState(false);
+    const [isRemoving, setIsRemoving] = useState(false);
+
+    useEffect(() => {
+        // Trigger enter animation
+        const timer = setTimeout(() => setIsVisible(true), 10);
+        return () => clearTimeout(timer);
+    }, []);
+
+    const handleClick = () => {
+        handleRemove();
+    };
+
+    const handleRemove = () => {
+        setIsRemoving(true);
+        setTimeout(() => {
+            onRemove(toast.id);
+        }, 300); // Match CSS animation duration
+    };
+
+    const getAnimationClass = () => {
+        if (isRemoving) return 'toast-exit';
+        if (isVisible) return 'toast-enter';
+        return 'toast-enter-prepare';
+    };
+
+    return React.createElement('div', {
+        className: `toast toast-${toast.type} ${getAnimationClass()}`,
+        onClick: handleClick,
+        style: {
+            cursor: 'pointer',
+            marginBottom: '8px',
+            transform: isVisible && !isRemoving ? 'translateY(0)' : 'translateY(-20px)',
+            opacity: isVisible && !isRemoving ? 1 : 0,
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+        }
+    }, toast.message);
+}
+
+// Enhanced Toast Container Component
+function ToastContainer({ toasts, placement }) {
+    return React.createElement('div', {
+        className: `toast-container ${placement}`,
+        style: {
+            position: 'fixed',
+            zIndex: 9999,
+            pointerEvents: 'none',
+            padding: '16px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '4px'
+        }
+    }, 
+    toasts.map(toast =>
+        React.createElement(Toast, {
+            key: toast.id,
+            toast: toast,
+            onRemove: (id) => toastStore.remove(id),
+            placement: placement
+        })
+    ));
+}
+
+// Toast Provider Component  
 function ToastProvider({ children, placement = 'top-right' }) {
     const [toasts, setToasts] = useState([]);
 
@@ -68,26 +154,6 @@ function ToastProvider({ children, placement = 'top-right' }) {
         React.createElement(ToastContainer, { toasts, placement })
     );
 }
-
-// Toast Container Component
-function ToastContainer({ toasts, placement }) {
-    const handleToastClick = (id) => {
-        toastStore.remove(id);
-    };
-
-    return React.createElement('div', {
-        className: `toast-container ${placement}`
-    }, 
-    toasts.map(toast =>
-        React.createElement('div', {
-            key: toast.id,
-            className: `toast toast-${toast.type}`,
-            onClick: () => handleToastClick(toast.id)
-        }, toast.message)
-    ));
-}
-
-// useToast Hook
 function useToast() {
     const context = React.useContext(ToastContext);
     if (!context) {
@@ -114,29 +180,38 @@ function DemoApp() {
         const successBtn = document.getElementById('success-btn');
         const errorBtn = document.getElementById('error-btn');
         const infoBtn = document.getElementById('info-btn');
+        const warningBtn = document.getElementById('warning-btn');
         const defaultBtn = document.getElementById('default-btn');
+        const persistentBtn = document.getElementById('persistent-btn');
+        const quickBtn = document.getElementById('quick-btn');
         const multipleBtn = document.getElementById('multiple-btn');
         const clearBtn = document.getElementById('clear-btn');
 
-        const handleSuccess = () => toast.success('🎉 Success! Operation completed successfully.');
-        const handleError = () => toast.error('❌ Error! Something went wrong. Please try again.');
-        const handleInfo = () => toast.info('ℹ️ Info: Here\'s some useful information for you.');
-        const handleDefault = () => toast.show('💬 This is a default toast message.');
+        const handleSuccess = () => toastStore.show('🎉 Success! This toast will auto-dismiss in 4 seconds.', { type: 'success' });
+        const handleError = () => toastStore.show('❌ Error! Something went wrong. Please try again.', { type: 'error' });
+        const handleInfo = () => toastStore.show('ℹ️ Info: Here\'s some useful information for you.', { type: 'info' });
+        const handleWarning = () => toastStore.show('⚠️ Warning! Please pay attention to this message.', { type: 'warning' });
+        const handleDefault = () => toastStore.show('💬 This is a default toast message.', { type: 'default' });
+        const handlePersistent = () => toastStore.show('📌 This toast stays until clicked!', { type: 'default', autoDismiss: false });
+        const handleQuick = () => toastStore.show('⚡ Quick toast! (1 second)', { type: 'info', duration: 1000 });
         
         const handleMultiple = () => {
-            toast.info('🚀 Starting process...');
-            setTimeout(() => toast.success('✅ Step 1 completed'), 500);
-            setTimeout(() => toast.success('✅ Step 2 completed'), 1000);
-            setTimeout(() => toast.success('🎯 All done!'), 1500);
+            // Show multiple toasts at once
+            toastStore.show('First toast! 🥇', { type: 'success' });
+            setTimeout(() => toastStore.show('Second toast! 🥈', { type: 'info' }), 200);
+            setTimeout(() => toastStore.show('Third toast! 🥉', { type: 'warning' }), 400);
         };
         
-        const handleClear = () => toast.clear();
+        const handleClear = () => toastStore.clear();
 
         // Add event listeners
         if (successBtn) successBtn.addEventListener('click', handleSuccess);
         if (errorBtn) errorBtn.addEventListener('click', handleError);
         if (infoBtn) infoBtn.addEventListener('click', handleInfo);
+        if (warningBtn) warningBtn.addEventListener('click', handleWarning);
         if (defaultBtn) defaultBtn.addEventListener('click', handleDefault);
+        if (persistentBtn) persistentBtn.addEventListener('click', handlePersistent);
+        if (quickBtn) quickBtn.addEventListener('click', handleQuick);
         if (multipleBtn) multipleBtn.addEventListener('click', handleMultiple);
         if (clearBtn) clearBtn.addEventListener('click', handleClear);
 
@@ -160,7 +235,10 @@ function DemoApp() {
             if (successBtn) successBtn.removeEventListener('click', handleSuccess);
             if (errorBtn) errorBtn.removeEventListener('click', handleError);
             if (infoBtn) infoBtn.removeEventListener('click', handleInfo);
+            if (warningBtn) warningBtn.removeEventListener('click', handleWarning);
             if (defaultBtn) defaultBtn.removeEventListener('click', handleDefault);
+            if (persistentBtn) persistentBtn.removeEventListener('click', handlePersistent);
+            if (quickBtn) quickBtn.removeEventListener('click', handleQuick);
             if (multipleBtn) multipleBtn.removeEventListener('click', handleMultiple);
             if (clearBtn) clearBtn.removeEventListener('click', handleClear);
         };
@@ -180,6 +258,11 @@ if (container) {
 document.addEventListener('DOMContentLoaded', () => {
     // Welcome toast
     setTimeout(() => {
-        toast.info('👋 Welcome to React Universal Toast demo! Try the buttons below.');
+        toastStore.show('👋 Welcome to React Universal Toast demo! Toasts now auto-dismiss after 4 seconds.', { type: 'info' });
     }, 1000);
+    
+    // Show a quick tip after welcome
+    setTimeout(() => {
+        toastStore.show('💡 Try the multiple toasts button to see them stack beautifully!', { type: 'success', duration: 6000 });
+    }, 2500);
 });
