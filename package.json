@@ -1,0 +1,51 @@
+{
+  "name": "react-universal-toast",
+  "version": "1.0.0",
+  "description": "A lightweight, customizable toast notification system for React applications with TypeScript support.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src/styles.css",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc && copyfiles src/styles.css dist",
+    "prepublishOnly": "npm run build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "react",
+    "toast",
+    "notification",
+    "nextjs",
+    "vite",
+    "class components"
+  ],
+  "author": "Devesh Lashkari <deveshlashkari@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deveshlashkari/react-universal-toast.git"
+  },
+  "homepage": "https://deveshlashkari.github.io/react-universal-toast",
+  "peerDependencies": {
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/react": "^19.1.11",
+    "@types/react-dom": "^19.1.7",
+    "copyfiles": "^2.4.1",
+    "http-server": "^14.1.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^30.0.5",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.4.0"
+  }
+}

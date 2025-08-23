@@ -1,0 +1,32 @@
+
+    # Build output
+/dist
+
+# Dependencies
+/node_modules
+    *.log
+    .DS_Store
+    .env
+    .vscode
+    .idea
+    .nyc_output
+    coverage
+    *.tgz
+    .parcel-cache
+    .cache
+    .pnp
+    .pnp.js
+    .eslintcache
+    .turbo
+    .next
+    out
+    build
+    .expo
+    .expo-shared
+    .web
+    .firebase
+    .vercel
+    .turbo
+    .parcel-cache
+    .rpt2_cache
+    .swc

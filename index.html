@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+       <script type="text/babel" data-type="module" src="demo.js"></script><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Toast Demo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #ffffff;
+        }
+        
+        /* Import your toast styles */
+        .toast-container {
+            position: fixed;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            font-family: inherit;
+            animation: fadeIn 0.3s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            max-width: 400px;
+            word-wrap: break-word;
+        }
+
+        .toast-default { background: #374151; }
+        .toast-success { background: #059669; }
+        .toast-error { background: #dc2626; }
+        .toast-info { background: #2563eb; }
+
+        /* Placement styles */
+        .toast-top-left { top: 16px; left: 16px; align-items: flex-start; }
+        .toast-top-center { top: 16px; left: 50%; transform: translateX(-50%); align-items: center; }
+        .toast-top-right { top: 16px; right: 16px; align-items: flex-end; }
+        .toast-bottom-left { bottom: 16px; left: 16px; align-items: flex-start; }
+        .toast-bottom-center { bottom: 16px; left: 50%; transform: translateX(-50%); align-items: center; }
+        .toast-bottom-right { bottom: 16px; right: 16px; align-items: flex-end; }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-10px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .toast:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <script type="text/babel" src="./demo.js"></script>
+</body>
+</html>
