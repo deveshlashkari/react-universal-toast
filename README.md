@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/react-universal-toast.svg)](https://badge.fury.io/js/react-universal-toast)
 [![npm downloads](https://img.shields.io/npm/dm/react-universal-toast.svg)](https://www.npmjs.com/package/react-universal-toast)
-[![Build Status](https://github.com/deveshlashkari/react-universal-toast/actions/workflows/ci.yml/badge.svg)](https://github.com/deveshlashkari/react-universal-toast/actions)
+[![Build Status](https://github.com/deveshlashkari/react-universal-toast/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/deveshlashkari/react-universal-toast/actions)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Bundle Size](https://img.shields.io/bundlephobia/minzip/react-universal-toast)](https://bundlephobia.com/package/react-universal-toast)
